@@ -4,15 +4,65 @@
 		<meta charset="UTF-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<link rel="stylesheet" href="./index.css" />
+		<link rel="stylesheet" href="./assets/reset.css">
+		<link rel="stylesheet" href="./index.css"/>
 		<link rel="shortcut icon" href="./assets/logo.PNG" type="image/x-icon" />
 		<title>Aula 10</title>
 	</head>
 	<body>
 		<header></header>
+		
 		<main>
-			<h1>Aula 10 - trabalho</h1>
+			<section class="cadastro">
+				<h1>Cadastro de produto</h1>
+				<div class="input-box">
+					<h3>Nome</h3>
+					<input type="text" name="text1" id="inputNomeProduto" class="text-input">
+				</div>
+				<div class="input-box">
+					<h3>Descrição</h3>
+					<textarea name="text2" id="inputDescricaoProduto" class="text-input"></textarea>
+				</div>
+				<div class="input-box">
+					<h3>Valor (R$)</h3>
+					<input type="number" name="numero" id="inputValorProduto" class="text-input">
+				</div>
+				
+				<div class="botao-wrapper">
+					<input type="button" value="Incluir produto" class="botao" id="incluirBotao">
+					<input type="button" value="Atualizar produto" class="botao" id="atualizarBotao">
+					<input type="button" value="Cancelar atualização" class="botao" id="cancelarBotao">
+					<input type="button" value="Listar produtos" class="botao" id="listarBotao">
+				</div>
+				
+				<p id="mensagem-erro"></p>
+			</section>
+
+			<aside class="lista-produtos">
+				<h2>Produtos</h2>
+				<table class="tabela-produtos">
+					<th class="linha-tabela">
+						<td class="id-produto">ID</td>
+						<td class="nome-produto">Produto</td>
+						<td class="valor-produto">Valor</td>
+						<td class="editar-produto">Editar</td>
+						<td class="apagar-produto">Apagar</td>
+					</th>
+					<tr class="linha-tabela">
+						<td class="id-produto">1</td>
+						<td class="nome-produto">Produto A</td>
+						<td class="valor-produto">R$ 23,00</td>
+						<td class="editar-produto">
+							<img src="./assets/edit.png" alt="Ícone de editar produto">
+						</td>
+						<td class="apagar-produto">
+							<img src="./assets/delete.png" alt="Ícone de apagar produto">
+						</td>
+					</tr>
+				</table>
+			</aside>
 		</main>
+
 		<footer></footer>
 
 		<script src="./index.js"></script>
