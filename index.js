@@ -9,6 +9,11 @@ chamar uma fucnao que apague o elemento ou edite o elemento,
 reenumere o indice dos elementos restantes, e mostre na tela a tabela atualziada
 
 */
+/*
+document.querySelector("container").addEventListener("click", (event) => {
+	console.log(event.target.parentNode.childNodes[1].textContent);
+});
+*/
 
 console.log("Start!");
 
@@ -45,6 +50,7 @@ let produtoEditado = {};
 //armazena as informações do produto que será/foi editado
 
 //FUNCÕES
+//colocar try catch
 botaoIncluirProduto.addEventListener("click", () => {
 	if (produtoEhValido()) {
 		adicionaProdutoNoArray();
@@ -77,7 +83,7 @@ botaoCancelaEdicao.addEventListener("click", () => {
 	escondeBotaoComId(botaoCancelaEdicao);
 	mostraBotaoComId(botaoIncluirProduto);
 	mostraBotaoComId(botaoListarProdutos);
-	mostraProdutos();
+	//mostraProdutos();
 });
 
 /*NOVA ABORDAGEM CONTAINER TABELA!!!!!!!!!!!!*/
