@@ -18,7 +18,7 @@ document.querySelector("container").addEventListener("click", (event) => {
 console.log("Start!");
 
 //VARIAVEIS e CONSTANTES GLOBAIS - DESCRICAO:
-let produtos = [];
+let listaDeProdutos = [];
 // cada elemento de produto será um objeto no formato:
 //{id:"",nome:"",descricao:"",valor:"","incluidoEm"}
 
@@ -26,24 +26,24 @@ let countId = 0;
 //contador que corresponde ao id
 //sempre incrementa de 1 em 1, garantindo a unicidade
 //de cada identificador
-const botaoIncluirProduto = document.querySelector("#");
-const botaoListarProdutos = document.querySelector("#");
+const botaoIncluirProduto = document.querySelector("#incluirBotao");
+const botaoListarProdutos = document.querySelector("#listarBotao");
 
-const inputNome = document.querySelector("#");
-const inputDescricao = document.querySelector("#");
-const inputValor = document.querySelector("#");
+const inputNome = document.querySelector("#inputNomeProduto");
+const inputDescricao = document.querySelector("#inputDescricaoProduto");
+const inputValor = document.querySelector("#inputValorProduto");
 
-const botaoConfirmaEdicao = document.querySelector("#"); //
+const botaoConfirmaEdicao = document.querySelector("#atualizarBotao"); //
 //esse botao comeca invisivel e so fica visivel se o usuario clicou na imagem da tabela que
 //faz referencia a edicao
-const botaoCancelaEdicao = document.querySelector("#");
+const botaoCancelaEdicao = document.querySelector("#cancelarBotao");
 //esse botao comeca invisivel e so fica visivel se o usuario clicou na imagem da tabela que
 //faz referencia a edicao
 
-const containerTabela = document.querySelector("#");
+const containerTabela = document.querySelector(".lista-produtos");
 // se dentro do elemento de tabela o usuario clicar na imagem de editar ou na imagem de apagar
 // deve mostrar
-
+const mensagemErro = document.querySelector("#mensagem-erro");
 let produtoApagado = {};
 //armazena as informações do produto que será/foi apagado
 let produtoEditado = {};
@@ -52,16 +52,42 @@ let produtoEditado = {};
 //FUNCÕES
 //colocar try catch
 botaoIncluirProduto.addEventListener("click", () => {
-	if (produtoEhValido()) {
+	try {
+		produtoEhValido();
 		adicionaProdutoNoArray();
+	} catch (error) {
+		console.log("Mensagem de erro");
+		mensagemErro.innerHTML = `${error}`;
 	}
 });
 //verificar produto e emitir mensagem de falha se não for válido
-function produtoEhValido() {}
+function produtoEhValido() {
+	mensagemErro.innerHTML = "";
+	if (inputNome.value === "") {
+		throw "[Erro] Nome está vazio!";
+	}
+	if (inputDescricao.value === "") {
+		throw "[Erro] Descrição está vazia!";
+	}
+	if (inputValor.value === "") {
+		throw "[Erro] Valor está vazio!";
+	}
+}
 
 //adicionar produto no array
 //pode ter dentro dela varias funcoes que adiciona cada elemento
-function adicionaProdutoNoArray() {}
+function adicionaProdutoNoArray() {
+	let produto = {};
+	countId = countId + 1;
+	//{id:"",nome:"",descricao:"",valor:"","incluidoEm"}
+	produto.id = countId;
+	produto.nome = inputNome.value;
+	produto.descricao = inputDescricao.value;
+	const currentDate = new Date();
+	produto.incluidoEm = currentDate.toISOString();
+	listaDeProdutos.push(produto);
+	console.log("Nova lista:", listaDeProdutos);
+}
 
 botaoListarProdutos.addEventListener("click", () => {
 	mostraProdutos();
@@ -107,7 +133,42 @@ containerTabela.addEventListener("click", (event) => {
 	}
 });
 
-function mostraProdutos() {}
+const tabelaDeProdutos = document.querySelector(".tabela-produtos");
+
+function mostraProdutos() {
+	tabelaDeProdutos.innerHTML = `
+	<tr class="linha-tabela table-heading">
+						<td class="id-produto">ID</td>
+						<td class="nome-produto">Produto</td>
+						<td class="valor-produto">Valor</td>
+						<td class="editar-produto">Editar</td>
+						<td class="apagar-produto">Apagar</td>
+					</tr>
+					`;
+	console.log("pegou tabela:", tabelaDeProdutos);
+	let indice = 0;
+	while (indice < listaDeProdutos.length) {
+		const tr = document.createElement("tr");
+		tr.innerHTML = `
+						<td class="id-produto">1</td>
+						<td class="nome-produto">Produto A</td>
+						<td class="valor-produto">R$ 23,00</td>
+						<td class="editar-produto">
+							<img src="./assets/edit.png" alt="Ícone de editar produto" />
+						</td>
+						<td class="apagar-produto">
+							<img src="./assets/delete.png" alt="Ícone de apagar produto" />
+						</td>
+		`;
+		tr.classList.add("linha-tabela");
+		tabelaDeProdutos.appendChild(tr);
+		console.log("pegou tabela:", tabelaDeProdutos);
+		indice++;
+	}
+
+	console.log("pegou tabela:", tabelaDeProdutos);
+	//create a line for each product
+}
 function armazenaTargetNaVariavel(target, produto) {}
 function mostraDadosDoProduto() {}
 function editaProduto() {}
