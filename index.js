@@ -22,6 +22,7 @@ let listaDeProdutos = [];
 // cada elemento de produto será um objeto no formato:
 //{id:"",nome:"",descricao:"",valor:"","incluidoEm"}
 
+let indiceElement = -1;
 let countId = 0;
 //contador que corresponde ao id
 //sempre incrementa de 1 em 1, garantindo a unicidade
@@ -43,6 +44,7 @@ const botaoCancelaEdicao = document.querySelector("#cancelarBotao");
 const containerTabela = document.querySelector(".lista-produtos");
 // se dentro do elemento de tabela o usuario clicar na imagem de editar ou na imagem de apagar
 // deve mostrar
+const dadosDoProdutoClicado = document.querySelector("#produto-clicado");
 const mensagemErro = document.querySelector("#mensagem-erro");
 let produtoApagado = {};
 //armazena as informações do produto que será/foi apagado
@@ -57,7 +59,10 @@ botaoIncluirProduto.addEventListener("click", () => {
 		adicionaProdutoNoArray();
 	} catch (error) {
 		console.log("Mensagem de erro");
-		mensagemErro.innerHTML = `${error}`;
+		mensagemErro.innerHTML = `Falha no cadastro do produto! ${error}`;
+		mensagemErro.style.visibility = "visible";
+		mensagemErro.style.color = "red";
+		//mensagemErro.setAttribute("display", "visible");
 	}
 });
 //verificar produto e emitir mensagem de falha se não for válido
@@ -87,6 +92,10 @@ function adicionaProdutoNoArray() {
 	const currentDate = new Date();
 	produto.incluidoEm = currentDate.toISOString();
 	listaDeProdutos.push(produto);
+	mensagemErro.innerHTML = `Produto ${produto.nome} incluído com sucesso!`;
+	mensagemErro.style.visibility = "visible";
+	mensagemErro.style.color = "green";
+	//mensagemErro.setAttribute("visibility", "visible");
 }
 
 botaoListarProdutos.addEventListener("click", () => {
@@ -115,6 +124,35 @@ botaoCancelaEdicao.addEventListener("click", () => {
 /*NOVA ABORDAGEM CONTAINER TABELA!!!!!!!!!!!!*/
 
 containerTabela.addEventListener("click", (event) => {
+	const element = event.target.parentNode;
+
+	if (element.classList.contains("editar-produto")) {
+		console.log("clicou no botao editar!!!");
+		//console.log(element.parentNode);
+		const idElement = parseInt(element.parentNode.childNodes[1].textContent);
+		indiceElement = achaIndiceDoProduto(idElement);
+		produtoEditado = listaDeProdutos[indiceElement];
+		mostraDadosDoProduto(produtoEditado);
+		//console.log(element.parentNode.childNodes[1].textContent);
+		//escondeBotaoComId(botaoIncluirProduto);
+		//escondeBotaoComId(botaoListarProdutos);
+		//mostraBotaoComId(botaoConfirmaEdicao);
+		//mostraBotaoComId(botaoCancelaEdicao);
+	} else if (element.classList.contains("apagar-produto")) {
+		console.log("clicou no botao apagar!!!");
+		//console.log(element.parentNode);
+		//console.log(element.parentNode.childNodes[1].textContent);
+		const idElement = parseInt(element.parentNode.childNodes[1].textContent);
+		apagaProduto(idElement);
+		mostraProdutos();
+	} else if (element.childNodes[3].classList.contains("nome-produto")) {
+		console.log("Mostra produto!!");
+		const idElement = parseInt(element.childNodes[1].textContent);
+		console.log("O ID DESSE ELEMENTO EH:", idElement);
+		indiceElement = achaIndiceDoProduto(idElement);
+		mostraProdutoSelecionado(indiceElement);
+	}
+	/*
 	if (event.target == "ImagemDeEditar") {
 		//pegue ID ou class desse target
 		// edite o elemento
@@ -130,7 +168,7 @@ containerTabela.addEventListener("click", (event) => {
 		//armazena na variavel global produtoApagado;
 		armazenaTargetNaVariavel(event.target, produtoApagado);
 		apagaProduto();
-	}
+	}*/
 });
 
 const tabelaDeProdutos = document.querySelector(".tabela-produtos");
@@ -170,9 +208,82 @@ function mostraProdutos() {
 	//create a line for each product
 }
 function armazenaTargetNaVariavel(target, produto) {}
-function mostraDadosDoProduto() {}
-function editaProduto() {}
+function mostraDadosDoProduto(produto) {
+	console.log("O produto que precisa aparecer na tela é:", produto);
+	inputNome.value = `${produto.nome}`;
+	inputDescricao.value = `${produto.descricao}`;
+	inputValor.value = `${produto.valor}`;
+}
+//{id:"",nome:"",descricao:"",valor:"","incluidoEm"}
+function editaProduto() {
+	listaDeProdutos[indiceElement].nome = inputNome.value;
+	listaDeProdutos[indiceElement].descricao = inputDescricao.value;
+	listaDeProdutos[indiceElement].valor = inputValor.value;
+	const currentDate = new Date();
+	listaDeProdutos[indiceElement].incluidoEm = currentDate.toISOString();
+}
 function escondeBotaoComId(botaoId) {}
 function mostraBotaoComId(botaoId) {}
 
-function apagaProduto() {}
+function achaIndiceDoProduto(idElement) {
+	let indice = 0;
+	while (indice < listaDeProdutos.length) {
+		if (idElement === listaDeProdutos[indice].id) {
+			console.log("Precisa mexer no elemento", listaDeProdutos[indice]);
+
+			return indice; //depois que eliminar o elemento, para o laço
+		}
+		indice++;
+	}
+}
+
+function apagaProduto(idElement) {
+	let indice = 0;
+	while (indice < listaDeProdutos.length) {
+		console.log(
+			"idElement = ",
+			idElement,
+			"id do objeto=",
+			listaDeProdutos[indice].id
+		);
+		if (idElement === listaDeProdutos[indice].id) {
+			console.log("Precisa apagar o elemento", listaDeProdutos[indice]);
+			produtoApagado = listaDeProdutos[indice];
+			listaDeProdutos.splice(indice, 1);
+			console.log("Elementos que restaram", listaDeProdutos);
+			return; //depois que eliminar o elemento, para o laço
+		}
+		indice++;
+	}
+}
+
+function mostraProdutoSelecionado(indiceElement) {
+	const stringData = passaDataParaFormatoPadrao(
+		listaDeProdutos[indiceElement].incluidoEm
+	);
+	dadosDoProdutoClicado.innerHTML = `
+	<p>Id: ${listaDeProdutos[indiceElement].id}</p>
+	<h3>Nome: ${listaDeProdutos[indiceElement].nome}</h3>
+	<p>Descrição: ${listaDeProdutos[indiceElement].descricao}</p>
+	<h4>Valor: R$ ${listaDeProdutos[indiceElement].valor}</h4>
+	<p>Incluído em: ${stringData}</p>
+	`;
+}
+function passaDataParaFormatoPadrao(data) {
+	console.log("data:", data);
+	console.log("dia:", data.substr(8, 2));
+	console.log("mes:", data.substr(5, 2));
+	console.log("ano:", data.substr(0, 4));
+	console.log("horario:", data.substr(11, 8));
+
+	const stringD =
+		data.substr(8, 2) +
+		"/" +
+		data.substr(5, 2) +
+		"/" +
+		data.substr(0, 4) +
+		" – " +
+		data.substr(11, 8);
+	return stringD;
+}
+//dd/mm/aaaa – HH:MM:SS
