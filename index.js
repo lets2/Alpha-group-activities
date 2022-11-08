@@ -83,10 +83,10 @@ function adicionaProdutoNoArray() {
 	produto.id = countId;
 	produto.nome = inputNome.value;
 	produto.descricao = inputDescricao.value;
+	produto.valor = inputValor.value;
 	const currentDate = new Date();
 	produto.incluidoEm = currentDate.toISOString();
 	listaDeProdutos.push(produto);
-	console.log("Nova lista:", listaDeProdutos);
 }
 
 botaoListarProdutos.addEventListener("click", () => {
@@ -145,14 +145,14 @@ function mostraProdutos() {
 						<td class="apagar-produto">Apagar</td>
 					</tr>
 					`;
-	console.log("pegou tabela:", tabelaDeProdutos);
+
 	let indice = 0;
 	while (indice < listaDeProdutos.length) {
 		const tr = document.createElement("tr");
 		tr.innerHTML = `
-						<td class="id-produto">1</td>
-						<td class="nome-produto">Produto A</td>
-						<td class="valor-produto">R$ 23,00</td>
+						<td class="id-produto">${listaDeProdutos[indice].id}</td>
+						<td class="nome-produto">${listaDeProdutos[indice].nome}</td>
+						<td class="valor-produto">${listaDeProdutos[indice].valor}</td>
 						<td class="editar-produto">
 							<img src="./assets/edit.png" alt="Ícone de editar produto" />
 						</td>
@@ -162,11 +162,11 @@ function mostraProdutos() {
 		`;
 		tr.classList.add("linha-tabela");
 		tabelaDeProdutos.appendChild(tr);
-		console.log("pegou tabela:", tabelaDeProdutos);
+
 		indice++;
 	}
 
-	console.log("pegou tabela:", tabelaDeProdutos);
+	console.log("ULTIMA LINHA DA TABELA:", tabelaDeProdutos);
 	//create a line for each product
 }
 function armazenaTargetNaVariavel(target, produto) {}
