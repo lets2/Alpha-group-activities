@@ -51,6 +51,19 @@ function produtoEhValido() {
 	if (inputValor.value === "") {
 		throw "[Erro] Valor está vazio!";
 	}
+	if (produtoEhRepetido(inputNome.value)) {
+		throw "[Erro] Produto já existe!"
+	}
+}
+
+function produtoEhRepetido(nome) {
+	let i = 0;
+	while (i < listaDeProdutos.length) {
+		if (listaDeProdutos[i].nome === nome) {
+			return true
+		}
+	}
+	return false
 }
 
 function adicionaProdutoNoArray() {
@@ -63,6 +76,7 @@ function adicionaProdutoNoArray() {
 	produto.descricao = inputDescricao.value;
 	produto.valor = inputValor.value;
 	const currentDate = new Date();
+	currentDate.setHours(currentDate.getHours() - 3);
 	produto.incluidoEm = currentDate.toISOString();
 	listaDeProdutos.push(produto);
 	mensagemErro.innerHTML = `Produto ${produto.nome} incluído com sucesso!`;
