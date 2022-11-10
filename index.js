@@ -62,6 +62,7 @@ function produtoEhRepetido(nome) {
 		if (listaDeProdutos[i].nome === nome) {
 			return true
 		}
+		i++;
 	}
 	return false
 }
